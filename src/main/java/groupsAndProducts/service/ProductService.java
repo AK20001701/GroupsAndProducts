@@ -20,4 +20,8 @@ public class ProductService {
     public List<Product> getAll() {
         return productDao.getAll();
     }
+
+    public List<Product> getAllProductsInGroupByGroupId(Long id) {
+        return productDao.getAllProductsInGroupByGroupId(id);
+    }
 }

@@ -49,4 +49,18 @@ public class JdbcGroupDao implements GroupDao {
 
         return allGroups;
     }
+
+    @Override
+    public Long getProductsCountById(Long id) {
+        String sql = "SELECT COUNT(*) FROM T_PRODUCT WHERE group_id =" + id;
+        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
+        try {
+            resultSet.next();
+            return Long.parseLong(resultSet.getString("count"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0L;
+    }
 }

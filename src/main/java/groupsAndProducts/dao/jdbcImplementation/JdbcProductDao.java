@@ -54,4 +54,29 @@ public class JdbcProductDao implements ProductDao {
 
         return allProducts;
     }
+
+    @Override
+    public List<Product> getAllProductsInGroupByGroupId(Long id) {
+        List<Product> allProducts = new ArrayList<>();
+        String sql = "SELECT * FROM T_PRODUCT WHERE group_id =" + id;
+        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
+        try {
+            while (resultSet.next()) {
+                try {
+                    long currId = Long.parseLong(resultSet.getString("PRODUCT_ID"));
+                    String productName = resultSet.getString("PRODUCT_NAME");
+                    long groupId = Long.parseLong(resultSet.getString("GROUP_ID"));
+                    BigDecimal price = new BigDecimal(resultSet.getString("PRODUCT_PRICE"));
+
+                    allProducts.add(new Product(currId, productName, groupId, price));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allProducts;
+    }
 }

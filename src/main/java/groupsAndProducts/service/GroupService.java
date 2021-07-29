@@ -13,12 +13,16 @@ public class GroupService {
         this.groupDao = new JdbcGroupDao();
     }
 
-    public Group getById(long id) {
+    public Group getById(Long id) {
         return groupDao.get(id);
     }
 
     public List<Group> getAll() {
         return groupDao.getAll();
+    }
+
+    public Long getProductsCountById(Long id){
+        return groupDao.getProductsCountById(id);
     }
 
 }
