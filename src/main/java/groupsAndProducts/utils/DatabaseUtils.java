@@ -1,15 +1,22 @@
 package groupsAndProducts.utils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class DatabaseUtils {
     private static DatabaseUtils instance;
 
-    private static final String URL = "jdbc:postgresql://localhost/hr_test";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "qwerty1243";
+    private static String URL = "";
+    private static String USER = "";
+    private static String PASSWORD = "";
 
     private DatabaseUtils() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("dbConfig");
+        URL = resourceBundle.getString("db.url");
+        USER = resourceBundle.getString("db.login");
+        PASSWORD = resourceBundle.getString("db.password");
     }
 
     public static DatabaseUtils getInstance() {
@@ -21,7 +28,7 @@ public class DatabaseUtils {
 
     public Connection getConnection() throws SQLException {
         loadMySQL();
-        return  DriverManager.getConnection(URL, USER, PASSWORD);
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     private void loadMySQL() {
