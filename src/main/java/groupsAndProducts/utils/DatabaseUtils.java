@@ -19,19 +19,6 @@ public class DatabaseUtils {
         return instance;
     }
 
-    public ResultSet query(String sql) {
-        loadMySQL();
-
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            Statement st = connection.createStatement();
-            return st.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public Connection getConnection() throws SQLException {
         loadMySQL();
         return  DriverManager.getConnection(URL, USER, PASSWORD);

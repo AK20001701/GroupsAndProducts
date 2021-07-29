@@ -32,9 +32,6 @@ public class JdbcProductDao implements ProductDao {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-//        String sql = "SELECT * FROM T_PRODUCT WHERE group_id =" + id + " LIMIT 10 OFFSET " + (page - 1) * MAX_PRODUCT_COUNT;
-//        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
-//        try {
             while (resultSet.next()) {
                 try {
                     long currId = Long.parseLong(resultSet.getString("PRODUCT_ID"));

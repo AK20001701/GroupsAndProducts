@@ -39,26 +39,6 @@ public class JdbcGroupDao implements GroupDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-//        List<Group> allGroups = new ArrayList<>();
-//        String sql = "SELECT * FROM T_GROUP" + " LIMIT 10 OFFSET " + (page - 1) * MAX_GROUP_COUNT;
-//        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
-//
-//        try {
-//            while (resultSet.next()) {
-//                try {
-//                    long currId = Long.parseLong(resultSet.getString("GROUP_ID"));
-//                    String groupName = resultSet.getString("GROUP_NAME");
-//                    allGroups.add(new Group(currId, groupName));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
         return allGroups;
     }
 
