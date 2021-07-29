@@ -6,8 +6,6 @@
     <title>Groups and products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-
     <script type="text/javascript">
         function nextProductPage() {
             window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage + 1}';
@@ -48,6 +46,10 @@
                 window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage}&sortByPrice=1';
             }
         }
+
+        function show(GroupId) {
+            window.location.href =  '${pageContext.request.contextPath}?groupId=' + GroupId + '&groupPage=${groupPage}&productPage=1';
+        }
     </script>
 </head>
 <body>
@@ -62,21 +64,13 @@
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Number of products</th>
-                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
 
                 <c:forEach var="curr" items="${groupElementCount}">
-                    <tr>
-                        <td>${curr.key.getGroupName()}</td>
-                        <td>${curr.value}</td>
-                        <input type="hidden" value="${curr.key.getId()}" name="GROUP_ID">
-                        <td>
-                            <a class="btn btn-outline-secondary"
-                               href="${pageContext.request.contextPath}?groupId=${curr.key.getId()}&groupPage=${groupPage}&productPage=1">Show</a>
-                        </td>
+                    <tr onclick="show(${curr.key.getId()})">
+                        <td>${curr.key.getGroupName()} (${curr.value})</td>
                     </tr>
                 </c:forEach>
 
@@ -114,7 +108,6 @@
                 <tr>
                     <th scope="col" onclick="sortByName()">
                         Name
-
                         <c:choose>
                             <c:when test="${sortByName == 0}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
@@ -135,7 +128,6 @@
                     </th>
                     <th scope="col" onclick="sortByPrice()">
                         Price
-
                         <c:choose>
                             <c:when test="${sortByPrice == 0}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sort-numeric-down" viewBox="0 0 16 16">

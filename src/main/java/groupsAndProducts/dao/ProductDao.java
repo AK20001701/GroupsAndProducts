@@ -4,6 +4,6 @@ import groupsAndProducts.domain.Product;
 
 import java.util.List;
 
-public interface ProductDao extends Dao<Product>{
+public interface ProductDao{
     List<Product> getAllProductsInGroupByGroupId(Long id, Integer page);
 }

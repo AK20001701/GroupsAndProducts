@@ -6,6 +6,8 @@ import groupsAndProducts.domain.Product;
 import groupsAndProducts.utils.DatabaseUtils;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,56 +16,25 @@ import java.util.List;
 public class JdbcProductDao implements ProductDao {
 
     private final int MAX_PRODUCT_COUNT = 10;
-
-    public Product get(long id) {
-        String sql = "SELECT * FROM child WHERE id =" + id;
-        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
-        Product product = null;
-        try {
-            resultSet.next();
-            long currId = Long.parseLong(resultSet.getString("PRODUCT_ID"));
-            String productName = resultSet.getString("PRODUCT_NAME");
-            long groupId = Long.parseLong(resultSet.getString("GROUP_ID"));
-            BigDecimal price = new BigDecimal(resultSet.getString("PRODUCT_PRICE"));
-
-            product = new Product(currId, productName, groupId, price);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return product;
-    }
-
-    public List<Product> getAll() {
-        List<Product> allProducts = new ArrayList<>();
-        String sql = "SELECT * FROM T_GROUP;";
-        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
-
-        try {
-            while (resultSet.next()) {
-                try {
-                    long currId = Long.parseLong(resultSet.getString("PRODUCT_ID"));
-                    String productName = resultSet.getString("PRODUCT_NAME");
-                    long groupId = Long.parseLong(resultSet.getString("GROUP_ID"));
-                    BigDecimal price = new BigDecimal(resultSet.getString("PRODUCT_PRICE"));
-
-                    allProducts.add(new Product(currId, productName, groupId, price));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return allProducts;
-    }
+    private final int LIMIT = 10;
 
     @Override
     public List<Product> getAllProductsInGroupByGroupId(Long id, Integer page) {
         List<Product> allProducts = new ArrayList<>();
-        String sql = "SELECT * FROM T_PRODUCT WHERE group_id =" + id + " LIMIT 10 OFFSET " + (page - 1) * MAX_PRODUCT_COUNT;
-        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
-        try {
+        int realPageNumber = page - 1;
+        int amountToSkip = realPageNumber * MAX_PRODUCT_COUNT;
+
+        try (Connection connection = DatabaseUtils.getInstance().getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM T_PRODUCT WHERE group_id = ? LIMIT ? OFFSET ?");
+            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(2, LIMIT);
+            preparedStatement.setInt(3, amountToSkip);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+//        String sql = "SELECT * FROM T_PRODUCT WHERE group_id =" + id + " LIMIT 10 OFFSET " + (page - 1) * MAX_PRODUCT_COUNT;
+//        ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
+//        try {
             while (resultSet.next()) {
                 try {
                     long currId = Long.parseLong(resultSet.getString("PRODUCT_ID"));

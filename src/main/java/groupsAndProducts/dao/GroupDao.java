@@ -2,6 +2,10 @@ package groupsAndProducts.dao;
 
 import groupsAndProducts.domain.Group;
 
-public interface GroupDao extends Dao<Group>{
+import java.util.List;
+
+public interface GroupDao{
     Long getProductsCountById(Long id);
+
+    List<Group> getPage(Integer page);
 }

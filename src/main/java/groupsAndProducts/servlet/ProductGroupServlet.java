@@ -39,11 +39,9 @@ public class ProductGroupServlet extends HttpServlet {
         if (req.getParameter("sortByName") != null) {
             sortByName = Integer.parseInt(req.getParameter("sortByName"));
         }
-
         if (req.getParameter("groupPage") != null) {
             groupPage = Integer.parseInt(req.getParameter("groupPage"));
         }
-
         if (req.getParameter("productPage") != null) {
             productPage = Integer.parseInt(req.getParameter("productPage"));
         }
@@ -52,35 +50,28 @@ public class ProductGroupServlet extends HttpServlet {
         }
 
         Map<Group, Long> groupElementCount = new TreeMap<>(
-                groupService.getAll().stream().collect(Collectors.toMap(e -> e, e -> groupService.getProductsCountById(e.getId())))
+                groupService.getPage(groupPage).stream().collect(Collectors.toMap(e -> e, e -> groupService.getProductsCountById(e.getId())))
         );
+
+        List<Product> productList = productService.getAllProductsInGroupByGroupId(groupId, productPage);
+
+        if (sortByName == 0) {
+            productList = productList.stream().sorted(Comparator.comparing(Product::getProductName)).collect(Collectors.toList());
+        } else if (sortByName == 1) {
+            productList = productList.stream().sorted((p1, p2) -> p2.getProductName().compareTo(p1.getProductName())).collect(Collectors.toList());
+        } else if (sortByPrice == 0) {
+            productList = productList.stream().sorted(Comparator.comparing(Product::getPrice)).collect(Collectors.toList());
+        } else if (sortByPrice == 1) {
+            productList = productList.stream().sorted((p1, p2) -> p2.getPrice().compareTo(p1.getPrice())).collect(Collectors.toList());
+        }
+
         req.setAttribute("groupElementCount", groupElementCount);
         req.setAttribute("groupId", groupId);
         req.setAttribute("groupPage", groupPage);
         req.setAttribute("productPage", productPage);
         req.setAttribute("sortByPrice", sortByPrice);
         req.setAttribute("sortByName", sortByName);
-
-        List<Product> productList = productService.getAllProductsInGroupByGroupId(groupId, productPage);
-
-        if (sortByName == 0) {
-            productList = productList.stream().sorted(Comparator.comparing(Product::getProductName)).collect(Collectors.toList());
-        }
-
-        if (sortByName == 1) {
-            productList = productList.stream().sorted((p1, p2) -> p2.getProductName().compareTo(p1.getProductName())).collect(Collectors.toList());
-        }
-
-        if (sortByPrice == 0) {
-            productList = productList.stream().sorted(Comparator.comparing(Product::getPrice)).collect(Collectors.toList());
-        }
-
-        if (sortByPrice == 1) {
-            productList = productList.stream().sorted((p1, p2) -> p2.getPrice().compareTo(p1.getPrice())).collect(Collectors.toList());
-        }
-
         req.setAttribute("products", productList);
-
 
         req.getRequestDispatcher(url).forward(req, resp);
     }

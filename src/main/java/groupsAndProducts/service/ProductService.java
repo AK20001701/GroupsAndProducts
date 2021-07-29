@@ -13,14 +13,6 @@ public class ProductService {
         this.productDao = new JdbcProductDao();
     }
 
-    public Product getById(long id) {
-        return productDao.get(id);
-    }
-
-    public List<Product> getAll() {
-        return productDao.getAll();
-    }
-
     public List<Product> getAllProductsInGroupByGroupId(Long id, Integer page) {
         return productDao.getAllProductsInGroupByGroupId(id, page);
     }

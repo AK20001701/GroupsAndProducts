@@ -32,6 +32,11 @@ public class DatabaseUtils {
         return null;
     }
 
+    public Connection getConnection() throws SQLException {
+        loadMySQL();
+        return  DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+
     private void loadMySQL() {
         try {
             Class.forName("org.postgresql.Driver");
