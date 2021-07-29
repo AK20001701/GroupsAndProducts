@@ -21,7 +21,7 @@ public class ProductService {
         return productDao.getAll();
     }
 
-    public List<Product> getAllProductsInGroupByGroupId(Long id) {
-        return productDao.getAllProductsInGroupByGroupId(id);
+    public List<Product> getAllProductsInGroupByGroupId(Long id, Integer page) {
+        return productDao.getAllProductsInGroupByGroupId(id, page);
     }
 }

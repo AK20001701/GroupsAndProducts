@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcProductDao implements ProductDao {
+
+    private final int MAX_PRODUCT_COUNT = 10;
+
     public Product get(long id) {
         String sql = "SELECT * FROM child WHERE id =" + id;
         ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
@@ -56,9 +59,9 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> getAllProductsInGroupByGroupId(Long id) {
+    public List<Product> getAllProductsInGroupByGroupId(Long id, Integer page) {
         List<Product> allProducts = new ArrayList<>();
-        String sql = "SELECT * FROM T_PRODUCT WHERE group_id =" + id;
+        String sql = "SELECT * FROM T_PRODUCT WHERE group_id =" + id + " LIMIT 10 OFFSET " + (page - 1) * MAX_PRODUCT_COUNT;
         ResultSet resultSet = DatabaseUtils.getInstance().query(sql);
         try {
             while (resultSet.next()) {

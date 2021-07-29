@@ -6,6 +6,49 @@
     <title>Groups and products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <script type="text/javascript">
+        function nextProductPage() {
+            window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage + 1}';
+        }
+
+        function prevProductPage() {
+            var currPage = '${productPage}';
+            if (currPage > 1) {
+                window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage - 1}';
+            }
+        }
+
+        function nextGroupPage() {
+            window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage + 1}&productPage=${productPage}';
+        }
+
+        function prevGroupPage() {
+            var currPage = '${groupPage}';
+            if (currPage > 1) {
+                window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage - 1}&productPage=${productPage}';
+            }
+        }
+
+        function sortByName() {
+            var currSort = '${sortByName}';
+            if (currSort == 1){
+                window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage}&sortByName=0';
+            } else {
+                window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage}&sortByName=1';
+            }
+        }
+
+        function sortByPrice() {
+            var currSort = '${sortByPrice}';
+            if (currSort == 1){
+                window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage}&sortByPrice=0';
+            } else {
+                window.location.href = '${pageContext.request.contextPath}?groupId=${groupId}&groupPage=${groupPage}&productPage=${productPage}&sortByPrice=1';
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -14,7 +57,7 @@
 
     <div class="row mt-3">
         <div class="table-responsive col-md-6">
-            <h2>Groups</h2>
+            <h2 onclick="handleClick()">Groups</h2>
             <table class="table">
                 <thead>
                 <tr>
@@ -27,14 +70,13 @@
 
                 <c:forEach var="curr" items="${groupElementCount}">
                     <tr>
-                        <form action="${pageContext.request.contextPath}/" method="POST" class="form-inline">
-                            <td>${curr.key.getGroupName()}</td>
-                            <td>${curr.value}</td>
-                            <input type="hidden" value="${curr.key.getId()}" name="GROUP_ID">
-                            <td>
-                                <button type="submit" class="btn btn-outline-secondary">Show</button>
-                            </td>
-                        </form>
+                        <td>${curr.key.getGroupName()}</td>
+                        <td>${curr.value}</td>
+                        <input type="hidden" value="${curr.key.getId()}" name="GROUP_ID">
+                        <td>
+                            <a class="btn btn-outline-secondary"
+                               href="${pageContext.request.contextPath}?groupId=${curr.key.getId()}&groupPage=${groupPage}&productPage=1">Show</a>
+                        </td>
                     </tr>
                 </c:forEach>
 
@@ -42,7 +84,7 @@
             </table>
 
             <div class="row">
-                <div class="col d-flex justify-content-center text-center">
+                <div class="col d-flex justify-content-center text-center" onclick="prevGroupPage()">
                     <div class="col d-flex justify-content-center text-center ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                              class="bi bi-chevron-left" viewBox="0 0 16 16">
@@ -52,9 +94,9 @@
                     </div>
                 </div>
                 <div class="col d-flex justify-content-center text-center">
-                    <h5>5</h5>
+                    <h5>${groupPage}</h5>
                 </div>
-                <div class="col d-flex justify-content-center text-center ">
+                <div class="col d-flex justify-content-center text-center " onclick="nextGroupPage()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                          class="bi bi-chevron-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -70,8 +112,8 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Price</th>
+                    <th scope="col" onclick="sortByName()">Name</th>
+                    <th scope="col" onclick="sortByPrice()">Price</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -84,7 +126,7 @@
                 </tbody>
             </table>
             <div class="row">
-                <div class="col d-flex justify-content-center text-center">
+                <div class="col d-flex justify-content-center text-center" onclick="prevProductPage()">
                     <div class="col d-flex justify-content-center text-center ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                              class="bi bi-chevron-left" viewBox="0 0 16 16">
@@ -94,9 +136,9 @@
                     </div>
                 </div>
                 <div class="col d-flex justify-content-center text-center">
-                    <h5>5</h5>
+                    <h5>${productPage}</h5>
                 </div>
-                <div class="col d-flex justify-content-center text-center ">
+                <div class="col d-flex justify-content-center text-center " onclick="nextProductPage()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                          class="bi bi-chevron-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
