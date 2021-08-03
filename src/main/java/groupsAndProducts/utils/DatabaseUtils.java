@@ -31,6 +31,7 @@ public class DatabaseUtils {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
+
     private void loadMySQL() {
         try {
             Class.forName("org.postgresql.Driver");
